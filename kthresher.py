@@ -360,7 +360,8 @@ def main():
         "-H",
         "--headers",
         action="store_true",
-        help="Include the search for kernel headers.",
+        help="Include the search for kernel headers,"
+        "does not include headers by default.",
     )
     parser.add_argument(
         "-k",
@@ -370,16 +371,11 @@ def main():
         const=0,
         metavar="N",
         choices=range(0, 10),
-        help="Number of kernels to keep, default 1.",
+        help="Number of kernels to keep, default 1,"
+        "requires purge to take action.",
     )
     parser.add_argument(
-        "-p", "--purge", help="Purge Unused Kernels.", action="store_true"
-    )
-    parser.add_argument(
-        "-s",
-        "--show-autoremoval",
-        action="store_true",
-        help="Show kernel packages available for autoremoval.",
+        "-p", "--purge", help="Purge Unused Kernels, does not purge by default.", action="store_true"
     )
     parser.add_argument("-v", "--verbose", action="store_true", help="Be verbose.")
     parser.add_argument(
@@ -425,24 +421,22 @@ def main():
     if args.verbose:
         options["verbose"] = args.verbose
     logging.info("Options: {0}".format(options))
-    # Show auto-removable, this is only available via explicit argument
-    if args.show_autoremoval:
-        logging.getLogger().setLevel(logging.INFO)
-        show_autoremovable_pkgs()
-        sys.exit(0)
     if options["dry_run"]:
         logging.info("----- DRY RUN -----")
         kthreshing(purge=False, headers=options["headers"], keep=options["keep"])
         sys.exit(0)
-    if options["purge"]:
+    elif options["purge"]:
         kthreshing(purge=True, headers=options["headers"], keep=options["keep"])
         sys.exit(0)
-    if not sys.stdout.isatty():
+    # If we are running without a tty, (like cron) then simply exit
+    elif not sys.stdout.isatty():
         sys.exit(0)
+    # If purge was not explicitly requested (config or cli), then show any
+    # available kernels for autoremoval
     else:
-        logging.error("No argument used.")
-        parser.print_help()
-        sys.exit(1)
+        logging.getLogger().setLevel(logging.INFO)
+        show_autoremovable_pkgs()
+        sys.exit(0)
 
 
 if __name__ == "__main__":

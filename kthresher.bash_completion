@@ -34,7 +34,7 @@ genOpts()
   local not_used=""
   # options in pairs
   local opts="--help,-h --config,-c --dry-run,-d --headers,-H --keep,-k --purge,-p "
-  opts+="--show-autoremoval,-s --verbose,-v --version,-V"
+  opts+="--verbose,-v --version,-V"
   for i in ${opts} ; do
     OLDIFS=${IFS}
     # set IFS to split our pairs
