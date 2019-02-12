@@ -4,6 +4,12 @@ branches:
     - master
     - development
 
+addons:
+  apt:
+    packages:
+      - python-apt
+      - python3-apt
+
 matrix:
   include:
     - python: 2.7
