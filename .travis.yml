@@ -1,5 +1,5 @@
 language: python
-sudo: enabled
+dist: xenial
 branches:
   only:
     - master

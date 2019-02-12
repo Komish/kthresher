@@ -51,5 +51,5 @@ setuptools.setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
     ],
-    data_files=[("/etc", ["kthresher.conf"]), ("/usr/share/man/man8", ["kthresher.8"])],
+    #data_files=[("/etc", ["kthresher.conf"]), ("/usr/share/man/man8", ["kthresher.8"])],
 )
